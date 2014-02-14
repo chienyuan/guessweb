@@ -1,0 +1,32 @@
+
+<% content_for :head do %>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
+
+<script>
+
+  var guessword = angular.module('guessword',[]);
+  guessword.controller('GuessCtrl', ['$scope','$http',function($scope,$http){
+    $scope.ask = function(){
+      // use http get get the result.
+      $http.get('/guesswords?pattern_str='+$scope.pattern_str+"&letter_str="+$scope.letter_str)
+        .then(function(result){ 
+        $scope.result = result.data;
+        return result.data });
+    }
+  }]);
+
+</script>
+
+<% end %>
+<h1>GuessWeb</h1>
+<p>This is a simple website for some word puzzle</p>
+<div ng-app='guessword'>
+  <div  ng-controller="GuessCtrl">
+  <input type="text" name="input" ng-model="pattern_str" size="30" placeholder="Enter your pattern ex. HELL*?">
+  <input type="text" name="input" ng-model="letter_str" size="30" placeholder="Enter your letters ex. ABOH?">
+  <button class="btn" ng-click="ask()" value="ask">Ask</button>
+  <p>
+  {{result}}
+  </p>
+  </div>
+</div>
